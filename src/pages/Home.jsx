@@ -10,8 +10,23 @@ function Home() {
 
   const [isLoading, setIsLoading] = useState(true);
 
+  const [categoryId, setCategoryId] = useState(0);
+
+  const [sortType, setSortType] = useState({
+    name: 'популярности',
+    sortProperty: 'rating',
+  });
+
   useEffect(() => {
-    fetch('https://647e7c3ac246f166da8f1d7f.mockapi.io/items')
+    setIsLoading(true);
+
+    const category = categoryId > 0 ? `category=${categoryId}` : '';
+    const order = sortType.sortProperty.includes('-') ? 'asc' : 'desc';
+    const sortBy = sortType.sortProperty.replace('-', '');
+
+    fetch(
+      `https://647e7c3ac246f166da8f1d7f.mockapi.io/items?${category}&sortBy=${sortBy}&order=${order}`,
+    )
       .then((res) => {
         return res.json();
       })
@@ -21,13 +36,19 @@ function Home() {
       })
       .catch((error) => console.log(error));
     window.scrollTo(0, 0);
-  }, []);
+  }, [categoryId, sortType]);
 
   return (
     <div className='container'>
       <div className='content__top'>
-        <Categories />
-        <Sort />
+        <Categories
+          categoryId={categoryId}
+          onChangeCategory={(index) => setCategoryId(index)}
+        />
+        <Sort
+          sortType={sortType}
+          onChangeSort={(index) => setSortType(index)}
+        />
       </div>
       <h2 className='content__title'>Все пиццы</h2>
       <div className='content__items'>
