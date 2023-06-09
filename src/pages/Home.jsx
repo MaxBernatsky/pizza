@@ -12,7 +12,7 @@ import { SearchContext } from '../App';
 import { setCategoryId } from '../redux/slices/filterSlice';
 
 function Home() {
-  const categoryId = useSelector((state) => state.filter.categoryId);
+  const { categoryId, sort } = useSelector((state) => state.filter);
 
   const dispatch = useDispatch();
 
@@ -22,13 +22,6 @@ function Home() {
 
   const [isLoading, setIsLoading] = useState(true);
 
-  // const [categoryId, setCategoryId] = useState(0);
-
-  const [sortType, setSortType] = useState({
-    name: 'популярности',
-    sortProperty: 'rating',
-  });
-
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
@@ -36,8 +29,8 @@ function Home() {
 
     const category = categoryId > 0 ? `category=${categoryId}` : '';
     const search = searchValue ? `&search=${searchValue}` : '';
-    const order = sortType.sortProperty.includes('-') ? 'asc' : 'desc';
-    const sortBy = sortType.sortProperty.replace('-', '');
+    const order = sort.sortProperty.includes('-') ? 'asc' : 'desc';
+    const sortBy = sort.sortProperty.replace('-', '');
 
     fetch(
       `https://647e7c3ac246f166da8f1d7f.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`,
@@ -51,7 +44,7 @@ function Home() {
       })
       .catch((error) => console.log(error));
     window.scrollTo(0, 0);
-  }, [categoryId, sortType, searchValue, currentPage]);
+  }, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
   return (
     <div className='container'>
@@ -60,10 +53,7 @@ function Home() {
           categoryId={categoryId}
           onChangeCategory={(index) => dispatch(setCategoryId(index))}
         />
-        <Sort
-          sortType={sortType}
-          onChangeSort={(index) => setSortType(index)}
-        />
+        <Sort />
       </div>
       <h2 className='content__title'>Все пиццы</h2>
       <div className='content__items'>
