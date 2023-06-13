@@ -1,8 +1,6 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 
 import Categories from '../components/Categories/Categories';
 import Sort from '../components/Sort/Sort';
@@ -13,41 +11,34 @@ import { SearchContext } from '../App';
 
 import { setCategoryId, setCurrentPage } from '../redux/slices/filterSlice';
 
+import { fetchPizza } from '../redux/slices/pizzaSlice';
+
 function Home() {
   const { categoryId, sort, currentPage } = useSelector(
     (state) => state.filter,
   );
 
-  const dispatch = useDispatch();
+  const { items, status } = useSelector((state) => state.pizza);
 
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const { searchValue } = useContext(SearchContext);
 
-  const [items, setItems] = useState([]);
-
-  const [isLoading, setIsLoading] = useState(true);
-
   const onChangePage = (number) => dispatch(setCurrentPage(number));
 
-  useEffect(() => {
-    setIsLoading(true);
-
+  const getPizza = async () => {
     const category = categoryId > 0 ? `category=${categoryId}` : '';
     const search = searchValue ? `&search=${searchValue}` : '';
     const order = sort.sortProperty.includes('-') ? 'asc' : 'desc';
     const sortBy = sort.sortProperty.replace('-', '');
 
-    axios
-      .get(
-        `https://647e7c3ac246f166da8f1d7f.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`,
-      )
-      .then((res) => {
-        setItems(res.data);
-        setIsLoading(false);
-      });
+    dispatch(fetchPizza({ category, search, order, sortBy, currentPage }));
 
     window.scrollTo(0, 0);
+  };
+
+  useEffect(() => {
+    getPizza();
   }, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
   return (
@@ -61,7 +52,7 @@ function Home() {
       </div>
       <h2 className='content__title'>Все пиццы</h2>
       <div className='content__items'>
-        {isLoading
+        {status === 'loading'
           ? [...new Array(9)].map((_, index) => <Skeleton key={index} />)
           : items.map((item) => <PizzaBlock key={item.id} {...item} />)}
       </div>
@@ -69,5 +60,4 @@ function Home() {
     </div>
   );
 }
-
 export default Home;
