@@ -15,6 +15,7 @@ import {
 } from '../redux/slices/filterSlice';
 
 import { fetchPizza, selectPizzaData } from '../redux/slices/pizzaSlice';
+import { Link } from 'react-router-dom';
 
 function Home() {
   const { categoryId, sort, currentPage, searchValue } =
@@ -54,7 +55,11 @@ function Home() {
       <div className='content__items'>
         {status === 'loading'
           ? [...new Array(9)].map((_, index) => <Skeleton key={index} />)
-          : items.map((item) => <PizzaBlock key={item.id} {...item} />)}
+          : items.map((item) => (
+              <Link to={`/pizza/${item.id}`} key={item.id}>
+                <PizzaBlock {...item} />
+              </Link>
+            ))}
       </div>
       <Pagination currentPage={currentPage} onChangePage={onChangePage} />
     </div>
