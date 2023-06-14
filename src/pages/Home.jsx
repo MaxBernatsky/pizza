@@ -7,22 +7,22 @@ import Sort from '../components/Sort/Sort';
 import PizzaBlock from '../components/PizzaBlock/PizzaBlock';
 import Skeleton from '../components/PizzaBlock/Skeleton';
 import Pagination from '../components/Pagination/Pagination';
-import { SearchContext } from '../App';
 
-import { setCategoryId, setCurrentPage } from '../redux/slices/filterSlice';
+import {
+  selectFilter,
+  setCategoryId,
+  setCurrentPage,
+} from '../redux/slices/filterSlice';
 
-import { fetchPizza } from '../redux/slices/pizzaSlice';
+import { fetchPizza, selectPizzaData } from '../redux/slices/pizzaSlice';
 
 function Home() {
-  const { categoryId, sort, currentPage } = useSelector(
-    (state) => state.filter,
-  );
+  const { categoryId, sort, currentPage, searchValue } =
+    useSelector(selectFilter);
 
-  const { items, status } = useSelector((state) => state.pizza);
+  const { items, status } = useSelector(selectPizzaData);
 
   const dispatch = useDispatch();
-
-  const { searchValue } = useContext(SearchContext);
 
   const onChangePage = (number) => dispatch(setCurrentPage(number));
 
