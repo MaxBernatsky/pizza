@@ -3,7 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { selectSort, setSort } from '../../redux/slices/filterSlice';
 
-const list = [
+type SortItem = {
+  name: string;
+  sortProperty: string;
+};
+
+const list: SortItem[] = [
   { name: 'популярности (DESC)', sortProperty: 'rating' },
   { name: 'популярности (ASC)', sortProperty: '-rating' },
   { name: 'цене (DESC)', sortProperty: 'price' },
@@ -19,19 +24,19 @@ function Sort() {
 
   const sort = useSelector(selectSort);
 
-  const sortRef = useRef();
+  const sortRef = useRef<HTMLDivElement>(null);
 
   const handleOpenPopup = () => {
     setOpenPopup(!openPopup);
   };
 
-  const handleSelected = (obj) => {
+  const handleSelected = (obj: SortItem) => {
     dispatch(setSort(obj));
     setOpenPopup(false);
   };
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleClickOutside = (event: any) => {
       if (!event.composedPath().includes(sortRef.current)) {
         setOpenPopup(false);
       }

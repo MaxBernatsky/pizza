@@ -16,7 +16,7 @@ import {
 import { fetchPizza, selectPizzaData } from '../redux/slices/pizzaSlice';
 import { Link } from 'react-router-dom';
 
-function Home() {
+const Home: React.FC = () => {
   const { categoryId, sort, currentPage, searchValue } =
     useSelector(selectFilter);
 
@@ -24,7 +24,7 @@ function Home() {
 
   const dispatch = useDispatch();
 
-  const onChangePage = (number) => dispatch(setCurrentPage(number));
+  const onChangePage = (page: number) => dispatch(setCurrentPage(page));
 
   const getPizza = async () => {
     const category = categoryId > 0 ? `category=${categoryId}` : '';
@@ -32,7 +32,10 @@ function Home() {
     const order = sort.sortProperty.includes('-') ? 'asc' : 'desc';
     const sortBy = sort.sortProperty.replace('-', '');
 
-    dispatch(fetchPizza({ category, search, order, sortBy, currentPage }));
+    dispatch(
+      //@ts-ignore
+      fetchPizza({ category, search, order, sortBy, currentPage }),
+    );
 
     window.scrollTo(0, 0);
   };
@@ -46,7 +49,7 @@ function Home() {
       <div className='content__top'>
         <Categories
           categoryId={categoryId}
-          onChangeCategory={(index) => dispatch(setCategoryId(index))}
+          onChangeCategory={(index: number) => dispatch(setCategoryId(index))}
         />
         <Sort />
       </div>
@@ -54,7 +57,7 @@ function Home() {
       <div className='content__items'>
         {status === 'loading'
           ? [...new Array(9)].map((_, index) => <Skeleton key={index} />)
-          : items.map((item) => (
+          : items.map((item: any) => (
               <Link to={`/pizza/${item.id}`} key={item.id}>
                 <PizzaBlock {...item} />
               </Link>
@@ -63,5 +66,5 @@ function Home() {
       <Pagination currentPage={currentPage} onChangePage={onChangePage} />
     </div>
   );
-}
+};
 export default Home;
