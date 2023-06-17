@@ -26,6 +26,10 @@ const Home: React.FC = () => {
 
   const onChangePage = (page: number) => dispatch(setCurrentPage(page));
 
+  const onChangeCategory = (index: number) => {
+    dispatch(setCategoryId(index));
+  };
+
   const getPizza = async () => {
     const category = categoryId > 0 ? `category=${categoryId}` : '';
     const search = searchValue ? `&search=${searchValue}` : '';
@@ -49,7 +53,7 @@ const Home: React.FC = () => {
       <div className='content__top'>
         <Categories
           categoryId={categoryId}
-          onChangeCategory={(index: number) => dispatch(setCategoryId(index))}
+          onChangeCategory={onChangeCategory}
         />
         <Sort />
       </div>
