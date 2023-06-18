@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import Categories from '../components/Categories/Categories';
 import Sort from '../components/Sort/Sort';
@@ -14,7 +14,8 @@ import {
 } from '../redux/slices/filterSlice';
 
 import { fetchPizza, selectPizzaData } from '../redux/slices/pizzaSlice';
-import { Link } from 'react-router-dom';
+
+import { useAppDispatch } from '../redux/store';
 
 const Home: React.FC = () => {
   const { categoryId, sort, currentPage, searchValue } =
@@ -22,7 +23,7 @@ const Home: React.FC = () => {
 
   const { items, status } = useSelector(selectPizzaData);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const onChangePage = (page: number) => dispatch(setCurrentPage(page));
 
@@ -37,8 +38,13 @@ const Home: React.FC = () => {
     const sortBy = sort.sortProperty.replace('-', '');
 
     dispatch(
-      //@ts-ignore
-      fetchPizza({ category, search, order, sortBy, currentPage }),
+      fetchPizza({
+        category,
+        search,
+        order,
+        sortBy,
+        currentPage: String(currentPage),
+      }),
     );
 
     window.scrollTo(0, 0);
@@ -61,11 +67,7 @@ const Home: React.FC = () => {
       <div className='content__items'>
         {status === 'loading'
           ? [...new Array(9)].map((_, index) => <Skeleton key={index} />)
-          : items.map((item: any) => (
-              <Link to={`/pizza/${item.id}`} key={item.id}>
-                <PizzaBlock {...item} />
-              </Link>
-            ))}
+          : items.map((item: any) => <PizzaBlock {...item} />)}
       </div>
       <Pagination currentPage={currentPage} onChangePage={onChangePage} />
     </div>
