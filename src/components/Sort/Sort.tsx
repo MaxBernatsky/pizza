@@ -19,7 +19,7 @@ export const list: SortItem[] = [
   { name: 'алфавиту (ASC)', sortProperty: SortPropertyEnum.TITLE_ASC },
 ];
 
-const Sort: React.FC = React.memo(() => {
+export const Sort: React.FC = React.memo(() => {
   const [openPopup, setOpenPopup] = useState(false);
 
   const dispatch = useDispatch();

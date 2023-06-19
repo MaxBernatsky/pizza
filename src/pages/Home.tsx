@@ -1,11 +1,13 @@
 import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-import Categories from '../components/Categories/Categories';
-import Sort from '../components/Sort/Sort';
-import PizzaBlock from '../components/PizzaBlock/PizzaBlock';
-import Skeleton from '../components/PizzaBlock/Skeleton';
-import Pagination from '../components/Pagination/Pagination';
+import {
+  Pagination,
+  Skeleton,
+  PizzaBlock,
+  Categories,
+  Sort,
+} from '../components';
 
 import { setCategoryId, setCurrentPage } from '../redux/filter/slice';
 
