@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import Categories from '../components/Categories/Categories';
@@ -27,9 +27,9 @@ const Home: React.FC = () => {
 
   const onChangePage = (page: number) => dispatch(setCurrentPage(page));
 
-  const onChangeCategory = (index: number) => {
+  const onChangeCategory = useCallback((index: number) => {
     dispatch(setCategoryId(index));
-  };
+  }, []);
 
   const getPizza = async () => {
     const category = categoryId > 0 ? `category=${categoryId}` : '';
@@ -67,7 +67,7 @@ const Home: React.FC = () => {
       <div className='content__items'>
         {status === 'loading'
           ? [...new Array(9)].map((_, index) => <Skeleton key={index} />)
-          : items.map((item: any) => <PizzaBlock {...item} />)}
+          : items.map((item: any) => <PizzaBlock key={item.id} {...item} />)}
       </div>
       <Pagination currentPage={currentPage} onChangePage={onChangePage} />
     </div>

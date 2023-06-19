@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -19,7 +20,7 @@ export const list: SortItem[] = [
   { name: 'алфавиту (ASC)', sortProperty: SortPropertyEnum.TITLE_ASC },
 ];
 
-function Sort() {
+const Sort: React.FC = React.memo(() => {
   const [openPopup, setOpenPopup] = useState(false);
 
   const dispatch = useDispatch();
@@ -85,6 +86,6 @@ function Sort() {
       )}
     </div>
   );
-}
+});
 
 export default Sort;
