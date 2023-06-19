@@ -7,15 +7,12 @@ import PizzaBlock from '../components/PizzaBlock/PizzaBlock';
 import Skeleton from '../components/PizzaBlock/Skeleton';
 import Pagination from '../components/Pagination/Pagination';
 
-import {
-  selectFilter,
-  setCategoryId,
-  setCurrentPage,
-} from '../redux/slices/filterSlice';
-
-import { fetchPizza, selectPizzaData } from '../redux/slices/pizzaSlice';
+import { setCategoryId, setCurrentPage } from '../redux/filter/slice';
 
 import { useAppDispatch } from '../redux/store';
+import { selectFilter } from '../redux/filter/selectors';
+import { selectPizzaData } from '../redux/pizza/selectors';
+import { fetchPizza } from '../redux/pizza/asyncActions';
 
 const Home: React.FC = () => {
   const { categoryId, sort, currentPage, searchValue } =
